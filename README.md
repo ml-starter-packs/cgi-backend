@@ -1,5 +1,7 @@
 # cgi-backend-template
-production-grade(ish) backend with `gevent` + `gunicorn` which makes use of Python's native `cgi` library to create a basic API.
+arguably production-grade backend with `gevent` + `gunicorn` which makes use of Python's native `cgi` library to create a basic API.
+
+The primary purpose of this repository is educational, but it can readily be modified to turn python functions into an API if the requirements of the deployment are just "I need this to be accessible in the cloud."
 
 In this example, accuracy is computed using `sklearn.metrics.accuracy_score` at the `/stats` endpoint as a dictionary, and the resulting table from `pandas.DataFrame.describe` is retured as a CSV at the `/info` endpoint.
 
@@ -23,7 +25,10 @@ make prod
 ```
 
 # Minimal Example
-For an API that does nothing but uses as little code as possible, read below:
+For an API that does nothing except read CSV data and acknowledge the response of it, but uses as little code as possible, see below.
+If you just need to expose some basic functionality behind a live endpoint, the example below can provide a sufficient template.
+Once you have more than a single route to consider, the contents of this repository should serve as a template for that which is ready to scale with containerized deployment solutions.
+If you need functionality such as argument-checking, customized header policies, authentication, etc, then it is suggested you reach for `flask` or `fastapi` instead of `cgi` to create your API.
 
 Create `app.py` (shown below):
 
