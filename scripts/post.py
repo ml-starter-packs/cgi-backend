@@ -7,7 +7,9 @@ import json
 import requests
 
 
-def post_data(data, host="http://localhost:1337", dest="/api", sorted=False, strip=False) -> str:
+def post_data(
+    data, host="http://localhost:1337", dest="/api", sorted=False, strip=False
+) -> str:
     """
     Creates CSV file in memory and posts it to `url` as multipart/form-data.
     """
@@ -66,9 +68,9 @@ if __name__ == "__main__":
 
     data = {"truth": [0, 1, 2], "pred": [1, 1, 0]}
 
-    response = post_data(data, dest='/info')
+    response = post_data(data, dest="/info")
     print("INFO:")
     print(response)
-    response = post_data(data, dest='/stats')
+    response = post_data(data, dest="/stats")
     print("STATS:")
     print(response)

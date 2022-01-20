@@ -2,13 +2,13 @@
 
 import cgi
 import io
-from typing import List, Dict
+from typing import List
 
-import pandas as pd
-import sklearn.metrics as mt
+import pandas as pd  # type: ignore
+import sklearn.metrics as mt  # type: ignore
 
 
-def app(environ, start_response):
+def app(environ, start_response) -> List[bytes]:
     # Route to requested handler.
     if environ["PATH_INFO"] == "/stats":
         return main(environ, start_response)
@@ -20,13 +20,12 @@ def app(environ, start_response):
 
 def get_data(environ) -> io.StringIO:
     form = cgi.FieldStorage(fp=environ["wsgi.input"], environ=environ)
-    data = io.BytesIO(form["data"].value)
-    data = io.TextIOWrapper(data, encoding="utf-8").read()
-    data = io.StringIO(data)  # file-like object
-    return data
+    byte_data = io.BytesIO(form["data"].value)
+    data: str = io.TextIOWrapper(byte_data, encoding="utf-8").read()
+    return io.StringIO(data)  # file-like object
 
 
-def return_data(data: str, start_response) -> List[str]:
+def return_data(data: str, start_response) -> List[bytes]:
     headers = [("Content-Type", "text/html")]
     start_response("200 OK", headers)
     return [data.encode("utf-8")]
@@ -45,13 +44,13 @@ def summary_csv(data: io.StringIO) -> str:
     return out
 
 
-def main(environ, start_response):
+def main(environ, start_response) -> List[bytes]:
     data = get_data(environ)
     out = compute_stats(data)
     return return_data(out, start_response)
 
 
-def info(environ, start_response):
+def info(environ, start_response) -> List[bytes]:
     data = get_data(environ)
     out = summary_csv(data)
     return return_data(out, start_response)
