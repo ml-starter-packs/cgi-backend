@@ -1,0 +1,5 @@
+gevent
+gunicorn
+numpy~=1.21.0
+pandas
+sklearn
