@@ -13,11 +13,14 @@ prod: build
 	  -p 1337:1337 \
 	  cgi-api
 
-test-sh:
+
+test.csv:
 	@echo "Generating `test.csv`"
 	echo "truth,pred" > test.csv
 	@echo "Testing with shell script using `curl`"
 	echo "0,1\n1,0\n1,1\n" >> test.csv
+
+test-sh: test.csv
 	./scripts/post.sh test.csv
 	@echo " "
 
