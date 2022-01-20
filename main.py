@@ -11,9 +11,9 @@ import sklearn.metrics as mt  # type: ignore
 def app(environ, start_response) -> List[bytes]:
     # Route to requested handler.
     if environ["PATH_INFO"] == "/stats":
-        return main(environ, start_response)
+        return main(environ, start_response, compute_stats)
     if environ["PATH_INFO"] == "/info":
-        return info(environ, start_response)
+        return main(environ, start_response, summary_csv)
     start_response("404 Not Found", [])
     return [b"Page not found."]
 
@@ -33,24 +33,14 @@ def return_data(data: str, start_response) -> List[bytes]:
 
 def compute_stats(data: io.StringIO) -> str:
     df = pd.read_csv(data)
-    score = mt.accuracy_score(y_true=df["truth"], y_pred=df["pred"])
-    out = str({"accuracy": score})
-    return out
+    accuracy_score = mt.accuracy_score(y_true=df["truth"], y_pred=df["pred"])
+    return str({"accuracy": accuracy_score})
 
 
 def summary_csv(data: io.StringIO) -> str:
-    df = pd.read_csv(data)
-    out = df.describe().to_csv(index=True)
-    return out
+    return pd.read_csv(data).describe().to_csv(index=True)
 
 
-def main(environ, start_response) -> List[bytes]:
-    data = get_data(environ)
-    out = compute_stats(data)
-    return return_data(out, start_response)
-
-
-def info(environ, start_response) -> List[bytes]:
-    data = get_data(environ)
-    out = summary_csv(data)
+def main(environ, start_response, function=compute_stats) -> List[bytes]:
+    out = function(get_data(environ))
     return return_data(out, start_response)
