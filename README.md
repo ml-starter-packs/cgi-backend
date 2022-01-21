@@ -77,4 +77,4 @@ curl -F data=@test.csv -H "Content-Type:multipart/form-data" -v http://localhost
 ## What about the `start_response` method in this example code?
 Python has defined the Web Server Gateway Interface (WSGI) for any developer interested in implementing their own web server and it serves as a standard allowing users to use different web servers interchangeably. One key component to any request is to have a response regardless of the running process's status. In a more complex service, there can be multiple methods running to be able to generate a response. If in any stage there is a failure, we need to update the response header with the appropriate failure information. A buffer for a header is maintained by the web server and the user can add any information they like to it using the `start_response` method. This buffer is then used to generate the header that will be attached to the response received by the client. 
 
-Interested readers can find more details [here](https://www.python.org/dev/peps/pep-3333/).  
+Interested readers can find more details [in PEP-3333](https://www.python.org/dev/peps/pep-3333/#the-start-response-callable).  
